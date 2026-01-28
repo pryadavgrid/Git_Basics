@@ -387,8 +387,6 @@ GitHub provides:
 * Conflicts = Manual resolution
 
 ---
-
-````markdown
 # Diff, Stash, Tags, Rebase, and Recovery in Git
 
 This section covers advanced Git concepts that help you inspect changes, manage temporary work, mark releases, rewrite history, and recover lost commits.
@@ -403,7 +401,6 @@ This section covers advanced Git concepts that help you inspect changes, manage 
 When files are in the staging area and you want to review them before committing:
 ```bash
 git diff --staged
-````
 
 ---
 
