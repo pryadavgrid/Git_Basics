@@ -399,7 +399,6 @@ This section covers advanced Git concepts that help you inspect changes, manage 
 
 ### View Staged Changes
 When files are in the staging area and you want to review them before committing:
-```bash
 git diff --staged
 
 ---
@@ -432,7 +431,6 @@ index 2c89356..2609bf1 100644
 +
 +this is a change to verify how the "git diff --staged" command works
 \ No newline at end of file
-```
 
 ---
 
