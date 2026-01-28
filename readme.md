@@ -388,173 +388,299 @@ GitHub provides:
 
 ---
 
+````markdown
+# Diff, Stash, Tags, Rebase, and Recovery in Git
 
+This section covers advanced Git concepts that help you inspect changes, manage temporary work, mark releases, rewrite history, and recover lost commits.
 
+---
 
-### Diff, Stash and Tags
+## Git Diff
 
-## Git diff
-The git diff is an informative command that shows the differences between two commits. It is used to compare the changes made in one commit with the changes made in another commit.
-when we are staging area mean when we make changes in a file then we check before commit 
+`git diff` is an informative command used to view differences between files, commits, or branches. It helps you review changes before committing them.
+
+### View Staged Changes
+When files are in the staging area and you want to review them before committing:
+```bash
 git diff --staged
+````
 
-# How to Read the Diff Output
+---
 
-* a/ - indicate original file
-* b/ - indicate updated file
-* --- - mark the original file
-* +++ - mark the updated file
-* @@ - shows the line numbers and position of changes
+## How to Read Diff Output
 
+Key symbols and markers in `git diff` output:
 
-Example :
+* `a/` → original file
+* `b/` → updated file
+* `---` → original file version
+* `+++` → updated file version
+* `@@` → line numbers and position of changes
+* `-` → removed line
+* `+` → added line
+
+### Example
+
+```diff
 diff --git a/01_file.text b/01_file.text
 index 2c89356..2609bf1 100644
 --- a/01_file.text
 +++ b/01_file.text
 @@ -1,3 +1,5 @@
  This Is First File
- 
+
 -we check for that
 \ No newline at end of file
 +we check for that
 +
-+this is change for the check working of "git diff --staged" command, it compare file in staging area
++this is a change to verify how the "git diff --staged" command works
 \ No newline at end of file
+```
 
+---
 
-# we can check the difference/Comparision B/W two banch, commit
+## Comparing Differences
 
-# Comparing Two Branches 
-git diff <FIRST-BRANCH-NAME> <SECOND-BRANCH-NAME>
-Or
-git diff FIRST-BRANCH-NAME..SECOND-BRANCH-NAME
+### Compare Two Branches
 
-Comparing Specific Commits:
-git diff <commit-hash-one_or_commit-id> <commit-hash-two_or_commit-id>
+```bash
+git diff <branch-1> <branch-2>
+```
 
-### Git Stash
-git stash is a was of save changes in temprory location, 
-it is usefull when we want to swith one branch to second branch without using commit or add file
-without using the "git stash" we can't swich one branch to another branch
+or
 
-Example 
-there is a changes in 01_file on main branch, 
-then we want to switch/checkout bug-fix branch. we use "git checkout bug-fix"
+```bash
+git diff branch-1..branch-2
+```
+
+### Compare Two Commits
+
+```bash
+git diff <commit-hash-1> <commit-hash-2>
+```
+
+---
+
+## Git Stash
+
+`git stash` temporarily saves uncommitted changes so you can switch branches without committing or losing work.
+
+This is useful when Git prevents you from switching branches due to local changes.
+
+### Example Scenario
+
+You have uncommitted changes on `main` and want to switch to `bug-fix`:
+
+```bash
+git checkout bug-fix
+```
+
+Error:
+
+```
 error: Your local changes to the following files would be overwritten by checkout:
-         02_file.text
-         Please commit your changes or stash them before you switch branches.
-         Aborting
+  02_file.text
+Please commit your changes or stash them before you switch branches.
+```
 
-so on this situation first we use "git stash" command for the save changes in temprory location
-we can give a message on stash eg. "git stash "Save this ABC"
-a message see in terminal : Saved working directory and index state WIP on main: 7e45c6e merge-conflict-done
+### Save Changes Temporarily
 
+```bash
+git stash
+```
 
-## View the stash list
-You can view the list of stashes by using the following command:
+With a message:
 
+```bash
+git stash push -m "Save this ABC"
+```
+
+---
+
+## View Stash List
+
+```bash
 git stash list
+```
 
+---
 
-## Apply the Most Recent Stash
-You can apply the stash by using the following command:
+## Apply Stash
 
+### Apply Most Recent Stash
+
+```bash
 git stash apply
+```
 
+### Apply a Specific Stash
 
-### Apply Specific Stash
-You can apply the specific stash by using the following command:
-
+```bash
 git stash apply stash@{0}
+```
 
-Here stash@{0} is the name of the stash. You can use the git stash list command to get the name of the stash.
+---
 
-## Applying and Drop a Stash
-You can apply and drop the stash by using the following command:
+## Apply and Remove Stash
 
+```bash
 git stash pop
+```
 
+---
 
-## Drop the stash
-You can drop the stash by using the following command:
+## Drop a Stash
 
+```bash
 git stash drop
+```
 
+---
 
-## Applying stash to a specific branch
-You can apply the stash to a specific branch by using the following command:
+## Apply Stash to a Specific Branch
 
+```bash
 git stash apply stash@{0} <branch-name>
+```
 
-## Clearing the stash
-You can clear the stash by using the following command:
+---
 
+## Clear All Stashes
+
+```bash
 git stash clear
+```
 
+---
 
-## Git Tag
-it look like a sticky note, mainly this is use for relesing version like 
+## Git Tags
 
+Git tags are like **sticky notes** used to mark specific commits, typically for **releases or versions** (e.g., `v1.0.0`).
 
+They help identify important points in project history such as production releases.
 
-## Rebase
-in the rebase mainly we change the head pointer of another branch
-Note : most of the case rebase use in another branch not the main branch
-step : 1. go to the another branch and then write comment 
+---
+
+## Git Rebase
+
+Rebase is used to move or replay commits from one branch onto another by changing the base commit.
+
+> ⚠️ Rebase is usually performed on **feature branches**, not on the `main` branch.
+
+### Rebase a Branch onto Main
+
+```bash
 git rebase main
+```
 
+---
 
-### Resolve any conflicts
-If there are any conflicts, you will need to resolve them manually. You can use the merge tool in VSCode to resolve the conflicts.
+### Resolving Rebase Conflicts
 
+If conflicts occur:
+
+1. Resolve conflicts manually (VS Code merge tools can help)
+2. Stage the resolved files:
+
+```bash
 git add <resolved-files>
+```
+
+3. Continue rebase:
+
+```bash
 git rebase --continue
+```
 
-### Git reflog
-git reflog same as git log or git log --oneline but it return more information of commit it mean git return history of commit or log
+---
 
+## Git Reflog
+
+`git reflog` records every change made to `HEAD`, including commits, resets, rebases, and checkouts.
+
+```bash
 git reflog
+```
 
+It provides **more detailed history** than `git log`.
 
-### Find specific commit
-we can find the specific history of any commit using commit HAS or Commit id
+---
 
+## Find a Specific Commit
+
+```bash
 git reflog <commit-hash>
+```
 
+---
 
-### Recover lost commits or changes
+## Recover Lost Commits or Changes
 
-some time after push the code or commite the message we want to get back to previous branch mean some time we don't need of updated code then we want to back to previous commit then we use the reset commit
-for this we need to privious branch hash where we want to go
-after that we can run command
+Sometimes you may want to go back to a previous commit and discard newer changes.
 
+### Reset to a Specific Commit
+
+```bash
 git reset --hard <commit-hash>
+```
 
-we can give a head vale where we want to say that how many commit we want to go back.
-using command  HEAD@{1} inside the @{} we give a number where we want to roll back
+### Reset Using HEAD Reference
 
+```bash
 git reset --hard HEAD@{1}
+```
 
-### GIT SSH Configuration
-you can read GitHub Documentation on  **https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account**
+* `HEAD@{1}` means “go back one step in reflog history”
+* Useful for undoing recent actions
 
+> ⚠️ `--hard` will permanently delete uncommitted changes
 
-## GitHub Set 
-1. create GitHub Repo
-2. in your Mac open terminal run these command 
-   1. git init
-   2. git add .
-   3. git commit -m "COMMIT-MESSAGE"
-   4. git branch -M Main 
-   5. git remote -v 
-   6. git git remote add origin "URL_Of_REPO"
-   7. git push -u origin main
+---
 
-   // init initilize the repo
-   // add all file
-   // commit the message
-   // rename tha main branch
-   // check the push and fetsh bonding 
-   // origin -> set the GITHUB_URL_NAME as origin it mean we do not write again and again "URL_OF_REPO" wite only origin
-   // -u -> set the upstrem branch mean whenever we push the code in this repo then automatic push/pull on the upstrem branch and the next time when we use command command "git push" then automatic push the code in origin main branch.
+## Git SSH Configuration
+
+To securely connect GitHub using SSH, follow the official GitHub documentation:
+
+👉 [https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+---
+
+## GitHub Repository Setup (Local to Remote)
+
+### Steps
+
+1. Create a repository on GitHub
+2. In your local project directory, run:
+
+```bash
+git init
+git add .
+git commit -m "COMMIT-MESSAGE"
+git branch -M main
+git remote -v
+git remote add origin <REPO_URL>
+git push -u origin main
+```
+
+### Explanation
+
+* `git init` → initialize Git repository
+* `git add .` → stage all files
+* `git commit` → create first commit
+* `git branch -M main` → rename branch to `main`
+* `git remote -v` → verify remote URLs
+* `origin` → alias for repository URL
+* `-u` → set upstream branch (future `git push` works without arguments)
+
+---
+
+## Summary
+
+* `git diff` → inspect changes
+* `git stash` → temporarily save work
+* `git tag` → mark releases
+* `git rebase` → rewrite commit history
+* `git reflog` → recover lost commits
+* `git reset --hard` → rollback safely (with caution)
+
+These tools make Git powerful, flexible, and safe for professional development workflows.
