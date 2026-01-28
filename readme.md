@@ -432,7 +432,7 @@ index 2c89356..2609bf1 100644
 +this is a change to verify how the "git diff --staged" command works
 \ No newline at end of file
 
----
+```
 
 ## Comparing Differences
 
